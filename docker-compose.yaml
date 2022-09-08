@@ -7,6 +7,8 @@ services:
     environment:
         MYSQL_ROOT_PASSWORD: ''
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "127.0.0.1:3306:3306"
     volumes:
       # NAMED VOLUMES
       # If the volume contains a database (a subdirectory named mysql)
