@@ -25,7 +25,7 @@ jobs:
           run: docker-compose -f "docker-compose.yaml" up -d --build
 
         - name: Run unit tests
-          run: docker-compose exec web pytest
+          run: docker-compose exec -T web pytest
 
         - name: Run browser tests
-          run: docker-compose exec web pytest nuremberg/documents/browser_tests.py
+          run: docker-compose exec -T web pytest nuremberg/documents/browser_tests.py
