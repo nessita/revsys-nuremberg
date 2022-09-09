@@ -24,6 +24,9 @@ jobs:
         - name: Invoke docker-compose
           run: docker-compose -f "docker-compose.yaml" up -d --build
 
+        - name: Setup DB
+          run: bash init.sh
+
         - name: Run unit tests
           run: docker-compose exec -T web pytest
 
