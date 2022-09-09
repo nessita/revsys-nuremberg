@@ -161,3 +161,5 @@ COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 HAYSTACK_DEFAULT_OPERATOR = 'AND'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
