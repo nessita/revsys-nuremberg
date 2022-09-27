@@ -13,6 +13,8 @@ services:
       # when you start the container, it will be left untouched and unaffected
       # by changes to environment variables like $MYSQL_ROOT_PASSWORD.
       - db_data:/var/lib/mysql:delegated
+    ports:
+      - "127.0.0.1:3306:3306"
   solr:
     build:
       context: ./
