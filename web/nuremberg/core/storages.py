@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Customize storage backends for file fields.
 
 This module has two functionalities:
