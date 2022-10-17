@@ -1,9 +1,9 @@
-from io import StringIO
+from functools import partial
 
 import pytest
-from django.core.management import call_command
 from model_bakery import baker
 
+from nuremberg.core.tests import helpers
 from nuremberg.documents.models import DocumentImage
 from nuremberg.transcripts.models import TranscriptPage
 
@@ -17,11 +17,7 @@ EXAMPLE_TRANSCRIPT_IMAGE_URL = (
 )
 
 
-def do_command_call(command_name='backfill_image_fields', **kwargs):
-    stdout = StringIO()
-    stderr = StringIO()
-    result = call_command(command_name, stderr=stderr, stdout=stdout, **kwargs)
-    return result, stdout, stderr
+do_command_call = partial(helpers.do_command_call, 'backfill_image_fields')
 
 
 # document images

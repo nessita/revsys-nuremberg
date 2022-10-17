@@ -11,6 +11,30 @@ logger = logging.getLogger(__name__)
 
 
 class Document(models.Model):
+
+    FIELDNAMES_MAPPING = {
+        'DocID': 'id',
+        'TitleDescriptive': 'title',
+        'Title': 'literal_title',
+        'Description': '',
+        'Photos': '',
+        'DocLanguageID': 'language',
+        'DocVersionID': 'source',
+        'DocCaseYN': '',
+        'DocImagesStatusID': '',
+        'DocTextsStatusID': '',
+        'ProcNotes': '',
+        'NoOfImages': 'image_count',
+        'HLSLBoxNo': '',
+        'HLSLBoxNoSuffix': '',
+        'HLSLFolderNo': '',
+        'HLSLFolderNoSuffix': '',
+        'Updated': 'updated_at',
+        'MasterDocID': '',
+        'InternalNotes': '',
+        'ImageFileNames': '',
+    }
+
     id = models.AutoField(primary_key=True, db_column='DocID')
     title = models.CharField(max_length=255, db_column='TitleDescriptive')
     literal_title = models.TextField(db_column='Title')
@@ -134,7 +158,7 @@ class DocumentImage(models.Model):
             result = self.image.url
         except ValueError:
             result = self._url
-            logger.exception(
+            logger.warning(
                 'No document image for "%s" (fallback %s)', self, result
             )
         return result
