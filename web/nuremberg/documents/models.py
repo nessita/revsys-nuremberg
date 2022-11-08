@@ -1039,7 +1039,7 @@ class DocumentText(models.Model):
 
     @cached_property
     def total_pages(self):
-        return self.content.count(self.evidence_code_tag)
+        return self.text.count(self.evidence_code_tag)
 
     @cached_property
     def document(self):

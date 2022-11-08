@@ -66,27 +66,7 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
             .prefetch_related('personal_authors')
             .prefetch_related('group_authors')
             .prefetch_related('defendants')
-            # .all()
-            .filter(  # testing purposes
-                id__in=[
-                    30,
-                    3058,
-                    2539,
-                    49,
-                    58,
-                    1437,
-                    3067,
-                    3107,
-                    2442,
-                    2443,
-                    2445,
-                    2447,
-                    2444,
-                    2446,
-                    6046,
-                    10375,
-                ]
-            )
+            .all()
         )
 
     def prepare_grouping_key(self, document):
@@ -149,7 +129,7 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
 
 class DocumentTextIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-    highlight = indexes.CharField(model_attr='content')
+    highlight = indexes.CharField(model_attr='text')
     material_type = indexes.CharField(default='Document', faceted=True)
     grouping_key = indexes.FacetCharField(
         facet_for='grouping_key'

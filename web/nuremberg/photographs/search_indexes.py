@@ -33,7 +33,7 @@ class PhotographId(indexes.SearchIndex, indexes.Indexable):
         return Photograph
 
     def index_queryset(self, using=None):
-        return Photograph.objects.none()
+        return Photograph.objects.all()
 
     def prepare_grouping_key(self, photo):
         # This is a hack to group transcripts but not documents in a single query.
