@@ -1,3 +1,5 @@
+{{ object.text|safe }}
+
 {{ object.title }}
 
 {{ object.literal_title|default:"" }}

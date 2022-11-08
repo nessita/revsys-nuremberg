@@ -49,6 +49,9 @@ class TranscriptPageIndex(indexes.SearchIndex, indexes.Indexable):
     def get_updated_field(self):
         return 'updated_at'
 
+    def index_queryset(self, using=None):
+        return TranscriptPage.objects.none()
+
     def prepare_grouping_key(self, page):
         # This is a hack to group transcripts but not pages in a single query.
         # Transcripts get a group key, pages get a unique key.

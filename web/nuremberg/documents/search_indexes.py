@@ -1,7 +1,7 @@
 import json
 
 from haystack import indexes
-from nuremberg.documents.models import Document
+from nuremberg.documents.models import Document, DocumentText
 
 
 class JsonField(indexes.CharField):
@@ -28,7 +28,7 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     literal_title = indexes.CharField(model_attr='literal_title', null=True)
 
     total_pages = indexes.IntegerField(
-        model_attr='image_count', default=0, null=True
+        model_attr='total_pages', default=0, null=True
     )
     date = indexes.CharField(faceted=True, null=True)
     date_year = indexes.CharField(faceted=True, null=True)
@@ -66,7 +66,27 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
             .prefetch_related('personal_authors')
             .prefetch_related('group_authors')
             .prefetch_related('defendants')
-            .all()
+            # .all()
+            .filter(  # testing purposes
+                id__in=[
+                    30,
+                    3058,
+                    2539,
+                    49,
+                    58,
+                    1437,
+                    3067,
+                    3107,
+                    2442,
+                    2443,
+                    2445,
+                    2447,
+                    2444,
+                    2446,
+                    6046,
+                    10375,
+                ]
+            )
         )
 
     def prepare_grouping_key(self, document):
@@ -125,3 +145,33 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
             if str(code):
                 codes.append(str(code))
         return codes
+
+
+class DocumentTextIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    highlight = indexes.CharField(model_attr='content')
+    material_type = indexes.CharField(default='Document', faceted=True)
+    grouping_key = indexes.FacetCharField(
+        facet_for='grouping_key'
+    )  # XXX: needed???
+
+    slug = indexes.CharField(model_attr='slug', indexed=False)
+    title = indexes.CharField(model_attr='title', default='')
+    source = indexes.CharField(model_attr='source_citation')
+
+    total_pages = indexes.IntegerField(model_attr='total_pages')
+
+    evidence_codes = indexes.MultiValueField()  # Match what DocumentIndex has
+
+    def get_model(self):
+        return DocumentText
+
+    def get_updated_field(self):
+        return 'load_timestamp'
+
+    def prepare_grouping_key(self, obj):
+        # This is a hack to group transcripts but not other objects.
+        return 'DocumentText_{}'.format(obj.id)
+
+    def prepare_evidence_codes(self, obj):
+        return [obj.evidence_code]

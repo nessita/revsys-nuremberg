@@ -37,6 +37,22 @@ class Document(models.Model):
     def __str__(self):
         return "#{0} - {1}".format(self.id, self.title)
 
+    @cached_property
+    def full_text(self):
+        return self.full_texts().first()
+
+    @cached_property
+    def source_name(self):
+        return self.source.name
+
+    @cached_property
+    def text(self):
+        return self.full_text if self.full_text is not None else ''
+
+    @cached_property
+    def total_pages(self):
+        return self.image_count
+
     def page_range(self):
         return range(1, (self.image_count or 0) + 1)
 
@@ -1009,6 +1025,26 @@ class DocumentText(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    @cached_property
+    def evidence_code(self):
+        return f'{self.evidence_code_series}-{self.evidence_code_num}'
+
+    @cached_property
+    def slug(self):
+        return self.document.slug if self.document else slugify(self.title)
+
+    @cached_property
+    def source_name(self):
+        return self.source_citation
+
+    @cached_property
+    def total_pages(self):
+        return self.content.count(self.evidence_code_tag)
+
+    @cached_property
+    def document(self):
+        return self.documents().first()
+
     def documents(self):
         """Fetch the most relevant Document for this DocumentText.
 
@@ -1050,7 +1086,7 @@ class DocumentText(models.Model):
         try:
             evidence_code_number = int(self.evidence_code_num)
         except ValueError:
-            logger.exception(
+            logger.info(
                 'DocumentText: Can not search for related documents for text '
                 '%s and evidence code %s (number: %s, series: %s)',
                 self.id,
