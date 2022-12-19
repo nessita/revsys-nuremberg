@@ -1,5 +1,8 @@
 from django.http import Http404
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+
+from django.views.decorators.csrf import csrf_exempt
 from haystack.generic_views import (
     FacetedSearchView,
     FacetedSearchMixin,
@@ -9,6 +12,7 @@ from .lib.digg_paginator import DiggPaginator
 from .lib.solr_grouping_backend import GroupedSearchQuerySet
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class Search(FacetedSearchView):
     """
     This is a subclass of the default Haystack faceted search view to implement
